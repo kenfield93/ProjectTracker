@@ -7,13 +7,13 @@ namespace ProjectTracker
     // this way we can mock a file or database repository
     public class InMemoryUserRepository : IRepository<IUser>
     {
-        int userId = 0;
-        List<User> users = new List<User>(){new User(1, new userInfo("kyle ", "enfield", OrgRoles.Engineer)), 
+        
+        List<IUser> users = new List<IUser>(){new User(1, new userInfo("kyle ", "enfield", OrgRoles.Engineer)), 
             new User(2, new userInfo("eli", "phelps")), new User( 3, new userInfo("Carlos", "Lopez", OrgRoles.DevOps))};
 
         public InMemoryUserRepository()
         {}
-        public InMemoryUserRepository(List<User> u) => users = u;
+        public InMemoryUserRepository(List<IUser> u) => users = u;
 
 
         public IUser GetById(int id)

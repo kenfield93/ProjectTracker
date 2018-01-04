@@ -3,43 +3,59 @@ using System.Collections.Generic;
 
 namespace ProjectTracker
 {
+
     public class InMemopryAssignmentRepository: IAssignmentRepository
     {
         private IRepository<IUser> _userRepo;
         private IRepository<ITask> _taskRepo;
-        private AssignmentManager assignment;
+        private List<IAssignment> ass;
+
+
         public InMemopryAssignmentRepository(IRepository<IUser> u, IRepository<ITask> t)
         {
+            
             _userRepo = u;
             _taskRepo = t;
+            ass = new List<IAssignment>(){
+                new Assignment( new Task(1, new TaskDescription("fixing a fence")), DateTime.Now, new List<IUser>(){
+                    new User(1, new userInfo("kyle", "enfield")), new User(2, new userInfo("eli", "phelps") )
+                }),
+                new Assignment( new Task(2, new TaskDescription("doing something")), DateTime.Now, new List<IUser>(){
+                    new User(1, new userInfo("kyle", "enfield")), new User(3, new  userInfo("jim", "bob") )
+                })
+            };
         }
 
-        private void Init(IRepository<IUser> uRepo, IRepository<ITask> tRepo){
-            // assignemnt file should have 
-            //DateTime dueDate, bool isComplete, ITask task, IE 
-        }
+
         public IRepository<IUser> Users => _userRepo;
 
         public IRepository<ITask> Tasks => _taskRepo;
 
         public IAssignment GetById(int id)
         {
-            throw new NotImplementedException();
+            foreach(var a in ass){
+                if (a.uniqueId == id)
+                    return a;
+            }
+            return null;
         }
 
         public IEnumerable<IAssignment> GetCollection()
         {
-            throw new NotImplementedException();
+            return ass;
         }
 
         public void Push(IAssignment ele)
         {
-            throw new NotImplementedException();
+            ass.Add(ele);
         }
 
         public void Put(IAssignment ele)
         {
-            throw new NotImplementedException();
+            for (var i = 0; i < ass.Count; i++){
+                if (ass[i].uniqueId == ele.uniqueId)
+                    ass[i] = ele;
+            }
         }
     }
 }

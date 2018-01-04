@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+
 namespace ProjectTracker
 {
     public class AssignmentManager: IAssignmentCollection
     {
         IDictionary<int, IAssignment> map;
         IUnitOfWork _unitOfWork;
+        IAssignmentRepository _repo;
 
         #region Constructors
         public AssignmentManager(){
@@ -16,14 +19,23 @@ namespace ProjectTracker
         public AssignmentManager(IDictionary<int, IAssignment> m){
             map = m;
         }
-        public AssignmentManager(IUnitOfWork u){
-            _unitOfWork = u;
+        public AssignmentManager(IAssignmentRepository r): this(){
+            Init(r);
+         
         }
-
-        public AssignmentManager(IUnitOfWork u, IDictionary<int, IAssignment> m): this(u){
+        public AssignmentManager(IAssignmentRepository r, IDictionary<int, IAssignment> m){
             map = m;
+            Init(r);
         }
 
+        public void Init(IAssignmentRepository r){
+            _repo = r;
+            var collection = r.GetCollection();
+            foreach (IAssignment a in collection)
+            {
+                this[a.uniqueId] = a;
+            }
+        }
         #endregion
         public IEnumerator GetEnumerator(){
             return ((IEnumerable)map).GetEnumerator();
@@ -77,6 +89,21 @@ namespace ProjectTracker
                 }
             }
                return new AssignmentManager(mapOfSubset);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder b = new StringBuilder();
+            b.AppendLine("AssignmentManager:");
+            foreach( IAssignment a in map.Values ){
+                b.Append("\n\t");
+                b.Append(a.task.ToString());
+                foreach(IUser u in a.GetUsers()){
+                    b.Append("\n\t\t");
+                    b.Append(u.ToString());
+                }
+            }
+            return b.ToString();
         }
     }
 }

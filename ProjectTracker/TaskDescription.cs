@@ -7,7 +7,7 @@ namespace ProjectTracker
         string description;
         public override string ToString()
         {
-            return string.Format("[TaskDescription] {0}", description );
+            return string.Format( description );
         }
     }
 

@@ -13,5 +13,9 @@ namespace ProjectTracker
         }
 
         public int uniqueId => _uniqueId;
+        public override string ToString()
+        {
+            return string.Format("User: {0} ", _info.ToString());
+        }
     }
 }

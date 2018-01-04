@@ -11,6 +11,7 @@ namespace ProjectTracker
         //TODO think about making this a map for O(1) lookup of employee by id 
         private IList<IUser> _users = new List<IUser>();
         public ITask task { get; }
+        public int uniqueId { get { return task.uniqueId; }}
         public bool isComplete { get; set; }
         public bool isActive { get { return !isComplete; }}
         private int ttl; 
@@ -33,7 +34,9 @@ namespace ProjectTracker
         public Assignment(ITask t, DateTime d): this(t){
             assignedDate = d;
         }
-
+        public Assignment(ITask t, DateTime d, IList<IUser> u): this(t, d){
+            _users = u;
+        }
 
         public int DaysUntilDue() { return ttl; }
         public void AddUser(IUser user){ if( user != null ) _users.Add(user); }
